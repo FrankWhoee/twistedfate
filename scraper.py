@@ -44,12 +44,6 @@ def fetch_events():
                 "title": title
             })
 
-    events[0] = {
-        "link": "youtube.com",
-        "title": "HOGGY VS RANES",
-        "time": datetime.fromtimestamp(1725856331)
-    }
-
     events_cache = events
     cache_last_updated = datetime.now()
     return events

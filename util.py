@@ -88,8 +88,8 @@ def get_tf_quote():
     return data[randint(0,len(data) - 1)]
 
 def filter_events(events, filter):
-    if filter is None:
-      return filter
+    if not filter:
+      return events
     
     output = []
 
