@@ -80,11 +80,7 @@ async def poll_and_wait(next_event, loop):
                 continue
             time_until_next_event = time_until(events[i]) - NOTIFY_BEFORE
             if time_until_next_event <= 0:
-                print(f"Event has been notified before: {event_notified_before(events[i])}")
-                if await notify(events[i]):
-                    print(f"Set on-time timer for {events[i]}")
-                    print(f"Waiting for {time_until(events[i])}")
-                    Timer(time_until(events[i]), notify_event_on_time_sync, args=(events[i], loop)).start()
+                await notify(events[i])
             else:
                 event = events[i]
                 break
@@ -120,6 +116,8 @@ async def notify(event):
     channel = await client.fetch_channel(NOTIFICATION_CHANNEL)
     await channel.send(embed=embed)
     notification_sent.append(event)
+    print("Added to notification_sent")
+    Timer(time_until(event), notify_event_on_time_sync, args=(event, asyncio.get_running_loop())).start()
     return True
 
 def poll_and_wait_sync(next_event, loop):
