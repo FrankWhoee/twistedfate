@@ -41,8 +41,7 @@ notification_sent = []
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
-
-    poll_and_wait_sync(None, asyncio.get_running_loop())
+    await poll_and_wait(None, asyncio.get_running_loop())
 
 def event_notified_before(event):
     global notification_sent
@@ -81,6 +80,8 @@ async def poll_and_wait(next_event, loop):
             time_until_next_event = time_until(events[i]) - NOTIFY_BEFORE
             if time_until_next_event <= 0:
                 if await notify(events[i]):
+                    print("Set on-time timer for " + events[i])
+                    print(f"Waiting for {time_until(events[i])}")
                     Timer(time_until(events[i]), notify_event_on_time_sync, args=(events[i], loop)).start()
             else:
                 event = events[i]
@@ -88,6 +89,7 @@ async def poll_and_wait(next_event, loop):
         if time_until_next_event < DEFAULT_INTERVAL:
             interval = time_until_next_event
             arg = event
+    print(f"Waiting for {interval} seconds.")
     Timer(interval, poll_and_wait_sync, (arg,loop)).start()
 
 async def notify_event_on_time(event):

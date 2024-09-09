@@ -13,6 +13,8 @@ def fetch_events():
 
     req = get("https://www.aceodds.com/bet365-live-streaming/basketball/ebasketball-h2h-gg-league-4x5mins.html", cookies=cookies)
 
+    # https://www.aceodds.com/b/b?u=https%3A%2F%2Fwww.bet365.com%2Folp%2Flive-streaming%3Faffiliate%3D365_03265597&l=0
+
     soup = BeautifulSoup(req.content, features="html.parser")
 
     table = soup.find(class_="table-responsive-sm").find_all("tr")
@@ -40,7 +42,7 @@ def fetch_events():
             time = time.replace(hour=hour, minute=minute)
             events.append({
                 "time": time,
-                "link": link,
+                "link": "https://www.aceodds.com" + link,
                 "title": title
             })
 
