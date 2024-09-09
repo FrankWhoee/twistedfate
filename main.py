@@ -80,6 +80,7 @@ async def poll_and_wait(next_event, loop):
                 continue
             time_until_next_event = time_until(events[i]) - NOTIFY_BEFORE
             if time_until_next_event <= 0:
+                print(f"Event has been notified before: {event_notified_before(events[i])}")
                 if await notify(events[i]):
                     print(f"Set on-time timer for {events[i]}")
                     print(f"Waiting for {time_until(events[i])}")
