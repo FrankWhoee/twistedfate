@@ -7,8 +7,8 @@ import os
 from scraper import fetch_events, get_events
 from util import create_env_template, filter_events, get_tf_quote
 from datetime import datetime,timedelta
+import time
 from humanize import naturaltime
-
 
 intents = discord.Intents.all()
 
@@ -31,9 +31,10 @@ DEFAULT_INTERVAL = int(os.environ["DEFAULT_INTERVAL"])
 NOTIFY_BEFORE = int(os.environ["NOTIFY_BEFORE"])
 NOTIFICATION_CHANNEL = os.environ["NOTIFICATION_CHANNEL"]
 NOTIFICATION_CHANNEL = None if not NOTIFICATION_CHANNEL else NOTIFICATION_CHANNEL
-
 FILTER_LIST = os.environ["FILTER_LIST"]
 FILTER_LIST = None if not FILTER_LIST else [x.strip() for x in FILTER_LIST.split(",")]
+
+time.tzset()
 
 # Contains list of events that have had notifications sent already
 notification_sent = []
@@ -80,7 +81,7 @@ async def poll_and_wait(next_event, loop):
             time_until_next_event = time_until(events[i]) - NOTIFY_BEFORE
             if time_until_next_event <= 0:
                 if await notify(events[i]):
-                    print("Set on-time timer for " + events[i])
+                    print(f"Set on-time timer for {events[i]}")
                     print(f"Waiting for {time_until(events[i])}")
                     Timer(time_until(events[i]), notify_event_on_time_sync, args=(events[i], loop)).start()
             else:

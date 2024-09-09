@@ -30,6 +30,9 @@ NOTIFICATION_CHANNEL=""
 # Filter list. Only alerts when these teams play. Use empty for all teams. Seperate by commas.
 # ex. FILTER_LIST = "HOGGY,TAAPZ,LANES"
 FILTER_LIST=""
+
+# Manually override timezone
+TZ="America/Vancouver"
 """
 
   with open(".env", "w") as f:
